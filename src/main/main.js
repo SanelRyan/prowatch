@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain, Tray, Menu, Notification } = require('elect
 const path = require('path')
 const Store = require('electron-store')
 const store = new Store()
+const { autoUpdater } = require('electron-updater')
 
 let mainWindow
 let tray
@@ -75,9 +76,22 @@ function createTray() {
     });
 }
 
+function checkForUpdates() {
+    autoUpdater.checkForUpdatesAndNotify();
+
+    autoUpdater.on('update-available', () => {
+        mainWindow.webContents.send('update-available');
+    });
+
+    autoUpdater.on('update-downloaded', () => {
+        mainWindow.webContents.send('update-downloaded');
+    });
+}
+
 app.whenReady().then(() => {
     createWindow();
     createTray();
+    checkForUpdates();
 })
 
 app.on('window-all-closed', () => {

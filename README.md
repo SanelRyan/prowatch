@@ -2,6 +2,8 @@
 
 A modern task timer application with a sleek interface. Prowatch helps you manage and track your daily tasks with precision timing and detailed statistics.
 
+![Prowatch](https://i.imgur.com/oSU07DP.jpeg)
+
 ## Features
 
 - 🎯 Task Timer Management
@@ -31,6 +33,10 @@ A modern task timer application with a sleek interface. Prowatch helps you manag
 
 - Windows 10 or higher
 
+## Installation
+
+Visit the [releases page](https://github.com/itsbennfr/prowatch/releases) to download the latest version.
+
 ## Technologies Used
 
 - Electron<br/>
@@ -41,14 +47,11 @@ A modern task timer application with a sleek interface. Prowatch helps you manag
 
 ## License
 
-MIT License
+[MIT License](https://github.com/itsbennfr/prowatch/blob/main/LICENSE)
 
 ## Author
 
 Sanel Ryan
-
-## Contact
-
 Email: sanelryantclitus@gmail.com<br/>
 Telegram: @itsbennfr<br/>
 Discord: @itsbennfr<br/>

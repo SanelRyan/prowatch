@@ -9,14 +9,15 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Sanel Ryan",
-  "license": "ISC",
+  "license": "MIT",
   "description": "Prowatch",
   "devDependencies": {
     "electron": "^34.2.0",
     "electron-builder": "^25.1.8"
   },
   "dependencies": {
-    "electron-store": "^8.2.0"
+    "electron-store": "^8.2.0",
+    "electron-updater": "^6.3.9"
   },
   "build": {
     "appId": "com.sanel.prowatch",
@@ -28,7 +29,15 @@
       "target": [
         {
           "target": "msi",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
         }
       ],
       "icon": "src/assets/icon.png"
@@ -45,6 +54,11 @@
     "msi": {
       "oneClick": false,
       "perMachine": true
+    },
+    "publish  ": {
+      "provider": "github",
+      "owner": "itsbennfr",
+      "repo": "prowatch"
     }
   }
 }
