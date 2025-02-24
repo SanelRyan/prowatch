@@ -1,0 +1,41 @@
+{
+  "name": "prowatch",
+  "version": "1.0.0",
+  "main": "src/main/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron .",
+    "build": "electron-builder",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sanel Ryan",
+  "license": "ISC",
+  "description": "A modern task timer application with a sleek Windows 11-inspired interface. Features include daily task tracking, multiple timer management, task statistics, system tray integration, and startup options..",
+  "devDependencies": {
+    "electron": "^34.2.0",
+    "electron-builder": "^25.1.8"
+  },
+  "dependencies": {
+    "electron-store": "^8.2.0"
+  },
+  "build": {
+    "appId": "com.sanel.prowatch",
+    "productName": "Prowatch",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "portable",
+      "icon": "src/assets/icon.png"
+    },
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "asar": true,
+    "releaseInfo": {
+      "releaseNotes": "",
+      "releaseDate": ""
+    }
+  }
+}

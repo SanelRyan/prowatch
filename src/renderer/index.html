@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prowatch</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .task-complete {
+            animation: pulse 0.5s ease-in-out forwards;
+        }
+        .no-pulse {
+            animation: none;
+        }
+        body {
+            background: linear-gradient(135deg, #18181b 0%, #27272a 100%);
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            overflow-y: overlay;
+        }
+        .win11-shadow {
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        .win11-button {
+            backdrop-filter: blur(20px);
+            background: rgba(39, 39, 42, 0.7);
+        }
+        .win11-button:hover {
+            background: rgba(63, 63, 70, 0.9);
+        }
+        .window-controls button {
+            -webkit-app-region: no-drag;
+        }
+        .titlebar {
+            -webkit-app-region: drag;
+        }
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(24, 24, 27, 0.3);
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(63, 63, 70, 0.5);
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(82, 82, 91, 0.8);
+        }
+    </style>
+    <audio id="timerComplete" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio>
+</head>
+<body class="min-h-screen p-0">
+    <div class="titlebar flex justify-between items-center fixed top-0 left-0 right-0 p-2 bg-zinc-900/80 backdrop-blur-sm border-b border-zinc-800/30 z-50">
+        <div class="text-zinc-400 text-sm pl-3">Prowatch</div>
+        <div class="window-controls flex">
+            <button onclick="minimizeWindow()" 
+                class="px-4 py-1.5 transition-all text-zinc-400 hover:text-zinc-100 hover:bg-zinc-700/50">
+                ─
+            </button>
+            <button onclick="window.close()" 
+                class="px-4 py-1.5 transition-all text-zinc-400 hover:text-zinc-100 hover:bg-red-500">
+                ✕
+            </button>
+        </div>
+    </div>
+
+    <div class="mt-[48px] p-4 md:p-8">
+        <div class="max-w-2xl mx-auto bg-zinc-900/80 backdrop-blur-xl rounded-2xl win11-shadow p-6 border border-zinc-800/50">
+            <h1 class="text-3xl font-semibold mb-8 text-zinc-50 text-center">Prowatch - Task Timer</h1>
+            
+            <form id="taskForm" class="mb-8 space-y-5">
+                <div class="relative">
+                    <input type="text" id="taskName" placeholder="What are you working on?" 
+                        class="w-full p-3 border border-zinc-700 rounded-lg bg-zinc-800/50 backdrop-blur text-zinc-50 placeholder-zinc-400 focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 transition-all" required>
+                </div>
+                
+                <div class="flex gap-4">
+                    <div class="w-1/2 relative">
+                        <label for="hours" class="block text-sm text-zinc-300 mb-1">Hours</label>
+                        <input type="number" id="hours" placeholder="0" min="0" 
+                            class="w-full p-3 border border-zinc-700 rounded-lg bg-zinc-800/50 backdrop-blur text-zinc-50 focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 transition-all">
+                    </div>
+                    <div class="w-1/2 relative">
+                        <label for="minutes" class="block text-sm text-zinc-300 mb-1">Minutes</label>
+                        <input type="number" id="minutes" placeholder="0" min="0" max="59" 
+                            class="w-full p-3 border border-zinc-700 rounded-lg bg-zinc-800/50 backdrop-blur text-zinc-50 focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 transition-all">
+                    </div>
+                </div>
+                
+                <div class="flex gap-4">
+                    <button type="submit" 
+                        class="flex-1 bg-gradient-to-r from-zinc-700 to-zinc-800 backdrop-blur text-white p-3 rounded-lg hover:from-zinc-600 hover:to-zinc-700 active:from-zinc-800 active:to-zinc-900 transform active:scale-98 transition-all font-medium text-lg">
+                        Add Task
+                    </button>
+                    <button type="button" onclick="addTaskToAllDays()"
+                        class="flex-1 bg-gradient-to-r from-zinc-700 to-zinc-800 backdrop-blur text-white p-3 rounded-lg hover:from-zinc-600 hover:to-zinc-700 active:from-zinc-800 active:to-zinc-900 transform active:scale-98 transition-all font-medium text-lg">
+                        Add to All Days
+                    </button>
+                </div>
+            </form>
+
+            <div class="mb-6 flex justify-between items-center">
+                <label for="dateSelector" class="block text-sm text-slate-400 mb-1">Select Date</label>
+                <button onclick="toggleStats()" 
+                    class="px-4 py-2 win11-button rounded-lg transition-all text-slate-50">
+                    Statistics
+                </button>
+            </div>
+
+            <div class="mb-6">
+                <div class="flex gap-2">
+                    <button onclick="changeDate(getPreviousDay())" 
+                        class="px-4 py-3 win11-button rounded-lg transition-all text-slate-50">
+                        ←
+                    </button>
+                    <input type="date" id="dateSelector"
+                           class="flex-1 p-3 border border-slate-800 rounded-lg bg-black/50 backdrop-blur text-slate-50 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all cursor-pointer [&::-webkit-calendar-picker-indicator]:invert">
+                    <button onclick="changeDate(getNextDay())" 
+                        class="px-4 py-3 win11-button rounded-lg transition-all text-slate-50">
+                        →
+                    </button>
+                </div>
+            </div>
+
+            <div id="taskList" class="space-y-5"></div>
+            
+            <div id="statsPanel" class="hidden mt-8 space-y-6 bg-zinc-800/50 backdrop-blur p-6 rounded-xl border border-zinc-700/50">
+                <h2 class="text-2xl font-semibold text-zinc-50">Task Statistics</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-zinc-900/50 p-4 rounded-lg">
+                        <h3 class="text-lg text-zinc-300 mb-2">Completion Rate</h3>
+                        <p id="completionRate" class="text-3xl font-semibold text-emerald-400"></p>
+                    </div>
+                    <div class="bg-zinc-900/50 p-4 rounded-lg">
+                        <h3 class="text-lg text-zinc-300 mb-2">Total Tasks</h3>
+                        <p id="totalTasks" class="text-3xl font-semibold text-blue-400"></p>
+                    </div>
+                </div>
+                <div id="tasksByDay" class="space-y-4"></div>
+            </div>
+
+            <button onclick="toggleSettings()" class="fixed bottom-4 right-4 p-3 win11-button rounded-full transition-all text-slate-50 hover:scale-110">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <div id="settingsModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
+        <div class="bg-zinc-900/90 backdrop-blur-xl rounded-2xl win11-shadow p-6 border border-zinc-800/50 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-semibold text-zinc-50">Settings</h2>
+                <button onclick="toggleSettings()" class="text-zinc-400 hover:text-zinc-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="space-y-6">
+                <div class="flex items-center justify-between p-4 bg-zinc-800/50 rounded-lg">
+                    <div>
+                        <h3 class="text-zinc-100 font-medium">Start on System Startup</h3>
+                        <p class="text-zinc-400 text-sm">Launch Prowatch when your computer starts</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="startupToggle" class="sr-only peer">
+                        <div class="w-11 h-6 bg-zinc-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-zinc-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                    </label>
+                </div>
+                <div class="flex items-center justify-between p-4 bg-zinc-800/50 rounded-lg">
+                    <div>
+                        <h3 class="text-zinc-100 font-medium">Start Minimized</h3>
+                        <p class="text-zinc-400 text-sm">Launch Prowatch in minimized state</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="startMinimizedToggle" class="sr-only peer">
+                        <div class="w-11 h-6 bg-zinc-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-zinc-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { ipcRenderer } = window.require('electron');
+        
+        let tasks = {};
+        let today = new Date().toISOString().split('T')[0];
+        
+        loadTasks();
+        document.getElementById('dateSelector').value = today;
+        
+        if (Notification.permission !== 'granted') {
+            Notification.requestPermission();
+        }
+        
+        function loadTasks() {
+            const storedTasks = localStorage.getItem('tasksByDate');
+            tasks = storedTasks ? JSON.parse(storedTasks) : {};
+            if (!tasks[today]) {
+                tasks[today] = [];
+            }
+            renderTasks();
+        }
+
+        document.getElementById('taskForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('taskName').value;
+            const hours = parseInt(document.getElementById('hours').value) || 0;
+            const minutes = parseInt(document.getElementById('minutes').value) || 0;
+
+            if (hours === 0 && minutes === 0) {
+                return;
+            }
+
+            const task = {
+                id: Date.now(),
+                name,
+                totalSeconds: (hours * 3600) + (minutes * 60),
+                remainingSeconds: (hours * 3600) + (minutes * 60),
+                isRunning: false
+            };
+
+            tasks[today].push(task);
+            renderTasks();
+            e.target.reset();
+        });
+
+        function renderTasks() {
+            const taskList = document.getElementById('taskList');
+            taskList.innerHTML = `
+                ${(tasks[today] || []).map(task => {
+                    const hours = Math.floor(task.remainingSeconds / 3600);
+                    const minutes = Math.floor((task.remainingSeconds % 3600) / 60);
+                    const seconds = task.remainingSeconds % 60;
+                    const timeClass = task.remainingSeconds === 0 ? 'text-red-400' : (task.isRunning ? 'text-emerald-400' : 'text-slate-100');
+
+                    return `
+                        <div onclick="removePulse(this)" class="bg-zinc-800/70 backdrop-blur p-5 rounded-xl win11-shadow hover:shadow-lg transition-all border border-slate-700/50 ${task.remainingSeconds === 0 ? 'task-complete' : ''}" style="cursor: pointer;">
+                            <div class="flex items-center justify-between flex-wrap gap-4">
+                                <div>
+                                    <h3 class="font-semibold text-lg text-slate-100 mb-1">${task.name}</h3>
+                                    <p class="text-2xl font-mono ${timeClass} transition-colors">
+                                        ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}
+                                    </p>
+                                </div>
+                                <div class="space-x-3">
+                                    <button onclick="toggleTimer(${task.id})" 
+                                        class="px-5 py-2.5 rounded-lg transform active:scale-98 transition-all font-medium backdrop-blur
+                                        ${task.isRunning 
+                                            ? 'bg-amber-600/90 hover:bg-amber-700/90 active:bg-amber-800/90' 
+                                            : 'bg-emerald-600/90 hover:bg-emerald-700/90 active:bg-emerald-800/90'} text-white">
+                                        ${task.isRunning ? 'Pause' : 'Start'}
+                                    </button>
+                                    <button onclick="deleteTask(${task.id})" 
+                                        class="px-5 py-2.5 rounded-lg bg-red-600/90 hover:bg-red-700/90 active:bg-red-800/90 backdrop-blur
+                                        transform active:scale-98 transition-all font-medium text-white">
+                                        Delete
+                                    </button>
+                                    <button onclick="deleteTaskFromAllDays('${task.name}')" 
+                                        class="px-5 py-2.5 rounded-lg bg-red-600/90 hover:bg-red-700/90 active:bg-red-800/90 backdrop-blur
+                                        transform active:scale-98 transition-all font-medium text-white">
+                                        Delete All
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('')}`;
+            localStorage.setItem('tasksByDate', JSON.stringify(tasks));
+        }
+
+        function removePulse(element) {
+            element.classList.add('no-pulse');
+            const taskId = parseInt(element.querySelector('button').onclick.toString().match(/toggleTimer\((\d+)\)/)[1]);
+            const task = tasks[today].find(t => t.id === taskId);
+            if (task && task.audioPlaying) {
+                const audio = document.getElementById('timerComplete');
+                audio.pause();
+                audio.currentTime = 0;
+                task.audioPlaying = false;
+            }
+        }
+
+        function changeDate(selectedDate) {
+            if (!tasks[selectedDate]) {
+                tasks[selectedDate] = [];
+            }
+            today = selectedDate;
+            document.getElementById('dateSelector').value = selectedDate;
+            renderTasks();
+        }
+
+        function toggleTimer(id) {
+            const task = tasks[today].find(t => t.id === id);
+            task.isRunning = !task.isRunning;
+            localStorage.setItem('tasksByDate', JSON.stringify(tasks));
+            renderTasks();
+
+            if (task.isRunning) {
+                task.interval = setInterval(() => {
+                    if (task.remainingSeconds > 0) {
+                        task.remainingSeconds--;
+                        renderTasks();
+                    } else {
+                        clearInterval(task.interval);
+                        task.isRunning = false;
+                        const audio = document.getElementById('timerComplete');
+                        audio.loop = true;
+                        audio.play();
+                        task.audioPlaying = true;
+                        
+                        if (Notification.permission === 'granted') {
+                            new Notification('Task Complete', {
+                                body: `${task.name} has been completed!`,
+                                icon: './src/assets/icon.png'
+                            });
+                        }
+                        
+                        renderTasks();
+                    }
+                }, 1000);
+            } else {
+                clearInterval(task.interval);
+            }
+        }
+
+        function deleteTask(id) {
+            const task = tasks[today].find(t => t.id === id);
+            if (task.interval) {
+                clearInterval(task.interval);
+            }
+            tasks[today] = tasks[today].filter(t => t.id !== id);
+            localStorage.setItem('tasksByDate', JSON.stringify(tasks));
+            renderTasks();
+        }
+
+        function addTaskToAllDays() {
+            const name = document.getElementById('taskName').value;
+            const hours = parseInt(document.getElementById('hours').value) || 0;
+            const minutes = parseInt(document.getElementById('minutes').value) || 0;
+
+            if (hours === 0 && minutes === 0 || !name) {
+                return;
+            }
+
+            Object.keys(tasks).forEach(date => {
+                const task = {
+                    id: Date.now() + Math.random(),
+                    name,
+                    totalSeconds: (hours * 3600) + (minutes * 60),
+                    remainingSeconds: (hours * 3600) + (minutes * 60),
+                    isRunning: false
+                };
+                tasks[date].push(task);
+            });
+            
+            renderTasks();
+            document.getElementById('taskForm').reset();
+        }
+
+        function deleteTaskFromAllDays(taskName) {
+            Object.keys(tasks).forEach(date => {
+                tasks[date] = tasks[date].filter(t => {
+                    if (t.name === taskName && t.interval) {
+                        clearInterval(t.interval);
+                    }
+                    return t.name !== taskName;
+                });
+            });
+            localStorage.setItem('tasksByDate', JSON.stringify(tasks));
+            renderTasks();
+        }
+
+        function getPreviousDay() {
+            const date = new Date(today);
+            date.setDate(date.getDate() - 1);
+            return date.toISOString().split('T')[0];
+        }
+
+        function getNextDay() {
+            const date = new Date(today);
+            date.setDate(date.getDate() + 1);
+            return date.toISOString().split('T')[0];
+        }
+
+        function toggleStats() {
+            const statsPanel = document.getElementById('statsPanel');
+            statsPanel.classList.toggle('hidden');
+            if (!statsPanel.classList.contains('hidden')) {
+                updateStats();
+            }
+        }
+
+        function updateStats() {
+            const stats = calculateStats();
+            
+            document.getElementById('completionRate').textContent = `${stats.completionRate}%`;
+            document.getElementById('totalTasks').textContent = stats.totalTasks;
+            
+            const tasksByDay = document.getElementById('tasksByDay');
+            tasksByDay.innerHTML = Object.entries(stats.dailyStats)
+                .sort((a, b) => b[0].localeCompare(a[0]))
+                .map(([date, stat]) => `
+                    <div class="bg-zinc-900/50 p-4 rounded-lg">
+                        <h3 class="text-lg text-zinc-300 mb-2">${formatDate(date)}</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-zinc-400">Completed</p>
+                                <p class="text-2xl font-semibold text-emerald-400">${stat.completed}</p>
+                            </div>
+                            <div>
+                                <p class="text-zinc-400">Total</p>
+                                <p class="text-2xl font-semibold text-blue-400">${stat.total}</p>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+        }
+
+        function calculateStats() {
+            let totalCompleted = 0;
+            let totalTasks = 0;
+            const dailyStats = {};
+
+            Object.entries(tasks).forEach(([date, taskList]) => {
+                const completed = taskList.filter(t => t.remainingSeconds === 0).length;
+                const total = taskList.length;
+                
+                dailyStats[date] = {
+                    completed,
+                    total
+                };
+                
+                totalCompleted += completed;
+                totalTasks += total;
+            });
+
+            const completionRate = totalTasks > 0 
+                ? Math.round((totalCompleted / totalTasks) * 100) 
+                : 0;
+
+            return {
+                completionRate,
+                totalTasks,
+                dailyStats
+            };
+        }
+
+        function formatDate(dateStr) {
+            return new Date(dateStr).toLocaleDateString('en-US', {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        // Update stats when tasks change
+        const originalRenderTasks = renderTasks;
+        renderTasks = function() {
+            originalRenderTasks();
+            if (!document.getElementById('statsPanel').classList.contains('hidden')) {
+                updateStats();
+            }
+        };
+
+        function minimizeWindow() {
+            ipcRenderer.send('minimize-window');
+        }
+
+        async function toggleSettings() {
+            const modal = document.getElementById('settingsModal');
+            modal.classList.toggle('hidden');
+            
+            if (!modal.classList.contains('hidden')) {
+                const isEnabled = await ipcRenderer.invoke('get-startup-status');
+                const savedEnabled = await loadSetting('startupEnabled');
+                document.getElementById('startupToggle').checked = isEnabled || savedEnabled || false;
+            }
+        }
+
+        async function saveSetting(key, value) {
+            await ipcRenderer.invoke('save-setting', key, value);
+        }
+
+        async function loadSetting(key) {
+            return await ipcRenderer.invoke('get-setting', key);
+        }
+
+        async function loadSettings() {
+            const startupEnabled = await loadSetting('startupEnabled') || false;
+            const startMinimized = await loadSetting('startMinimized') || false;
+            document.getElementById('startupToggle').checked = startupEnabled;
+            document.getElementById('startMinimizedToggle').checked = startMinimized;
+        }
+
+        document.getElementById('startupToggle').addEventListener('change', async (e) => {
+            const enabled = e.target.checked;
+            await ipcRenderer.invoke('toggle-startup', enabled);
+            await saveSetting('startupEnabled', enabled);
+        });
+
+        document.getElementById('startMinimizedToggle').addEventListener('change', async (e) => {
+            const enabled = e.target.checked;
+            await saveSetting('startMinimized', enabled);
+        });
+
+        loadSettings();
+    </script>
+</body>
+</html>
+
