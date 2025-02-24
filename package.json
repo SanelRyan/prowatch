@@ -38,6 +38,12 @@
           "arch": [
             "x64"
           ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
         }
       ],
       "icon": "src/assets/icon.png"
@@ -55,7 +61,7 @@
       "oneClick": false,
       "perMachine": true
     },
-    "publish  ": {
+    "publish": {
       "provider": "github",
       "owner": "itsbennfr",
       "repo": "prowatch"
