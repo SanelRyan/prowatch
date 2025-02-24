@@ -25,7 +25,12 @@
       "output": "dist"
     },
     "win": {
-      "target": "portable",
+      "target": [
+        {
+          "target": "msi",
+          "arch": ["x64"]
+        }
+      ],
       "icon": "src/assets/icon.png"
     },
     "files": [
@@ -36,6 +41,10 @@
     "releaseInfo": {
       "releaseNotes": "",
       "releaseDate": ""
+    },
+    "msi": {
+      "oneClick": false,
+      "perMachine": true
     }
   }
 }

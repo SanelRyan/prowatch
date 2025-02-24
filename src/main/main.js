@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, Tray, Menu } = require('electron')
+const { app, BrowserWindow, ipcMain, Tray, Menu, Notification } = require('electron')
 const path = require('path')
 const Store = require('electron-store')
 const store = new Store()
@@ -35,6 +35,15 @@ function createWindow() {
         if (!app.isQuitting) {
             event.preventDefault();
             mainWindow.hide();
+            const notification = new Notification({
+                title: 'Prowatch',
+                body: 'App is running in system tray. To fully close, right-click the tray icon and select Quit.'
+            });
+            notification.show();
+            mainWindow.webContents.send('show-notification', {
+                title: 'Prowatch',
+                body: 'App is running in system tray. To fully close, right-click the tray icon and select Quit.'
+            });
         }
         return false;
     });
@@ -123,4 +132,12 @@ ipcMain.handle('save-setting', (_, key, value) => {
 
 ipcMain.handle('get-setting', (_, key) => {
     return store.get(key);
+});
+
+ipcMain.on('show-notification', (_, options) => {
+    const notification = new Notification({
+        title: options.title,
+        body: options.body
+    });
+    notification.show();
 }); 
