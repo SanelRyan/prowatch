@@ -56,13 +56,6 @@ Email: sanelryantclitus@gmail.com<br/>
 Telegram: @itsbennfr<br/>
 Discord: @itsbennfr<br/>
 
-## Donations
-
-If you find Prowatch useful, consider supporting the development:
-- Solana: xxxx<br/>
-- Bitcoin: xxxx<br/>
-- Ethereum: xxxx<br/>
-
 ## Acknowledgements & Credits
 
 - [Electron](https://www.electronjs.org/)<br/>
