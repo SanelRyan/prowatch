@@ -5,27 +5,27 @@ A modern task timer application with a sleek interface. Prowatch helps you manag
 ## Features
 
 - 🎯 Task Timer Management
-  - Create timed tasks with hours and minutes
-  - Start, pause, and delete tasks
-  - Add tasks to all tracked days
-  - Visual and audio notifications on task completion
+  - Create timed tasks with hours and minutes<br/>
+  - Start, pause, and delete tasks<br/>
+  - Add tasks to all tracked days<br/>
+  - Visual and audio notifications on task completion<br/>
 
 - 📅 Date-based Task Organization
-  - Navigate between different days
-  - View and manage tasks by date
-  - Maintain separate task lists for each day
+  - Navigate between different days<br/>
+  - View and manage tasks by date<br/>
+  - Maintain separate task lists for each day<br/>
 
 - 📊 Statistics Dashboard
-  - Track completion rates
-  - View total tasks
-  - Daily task breakdown
-  - Historical task data
+  - Track completion rates<br/>
+  - View total tasks<br/>
+  - Daily task breakdown<br/>
+  - Historical task data<br/>
 
 - ⚙️ System Integration
-  - Start with system boot option
-  - Minimized start option
-  - System tray integration
-  - Desktop notifications
+  - Start with system boot option<br/>
+  - Minimized start option<br/>
+  - System tray integration<br/>
+  - Desktop notifications<br/>
 
 ## System Requirements
 
@@ -33,11 +33,11 @@ A modern task timer application with a sleek interface. Prowatch helps you manag
 
 ## Technologies Used
 
-- Electron
-- HTML/CSS/JavaScript
-- TailwindCSS
-- Electron Store
-- Local Storage for data persistence
+- Electron<br/>
+- HTML/CSS/JavaScript<br/>
+- TailwindCSS<br/>
+- Electron Store<br/>
+- Local Storage for data persistence<br/>
 
 ## License
 
@@ -49,22 +49,22 @@ Sanel Ryan
 
 ## Contact
 
-Email: sanelryantclitus@gmail.com
-Telegram: @itsbennfr
-Discord: @itsbennfr
+Email: sanelryantclitus@gmail.com<br/>
+Telegram: @itsbennfr<br/>
+Discord: @itsbennfr<br/>
 
 ## Donations
 
 If you find Prowatch useful, consider supporting the development:
-- Solana: xxxx
-- Bitcoin: xxxx
-- Ethereum: xxxx
+- Solana: xxxx<br/>
+- Bitcoin: xxxx<br/>
+- Ethereum: xxxx<br/>
 
 ## Acknowledgements & Credits
 
-- [Electron](https://www.electronjs.org/)
-- [TailwindCSS](https://tailwindcss.com/)
-- [Electron Store](https://www.npmjs.com/package/electron-store)
+- [Electron](https://www.electronjs.org/)<br/>
+- [TailwindCSS](https://tailwindcss.com/)<br/>
+- [Electron Store](https://www.npmjs.com/package/electron-store)<br/>
 
 ---
 
