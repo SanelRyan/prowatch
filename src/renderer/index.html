@@ -506,6 +506,27 @@
             const startMinimized = await loadSetting('startMinimized') || false;
             document.getElementById('startupToggle').checked = startupEnabled;
             document.getElementById('startMinimizedToggle').checked = startMinimized;
+
+            // Add update event listeners
+            ipcRenderer.on('update-available', () => {
+                const notification = new Notification('Update Available', {
+                    body: 'A new version of Prowatch is available and will be downloaded automatically.'
+                });
+                notification.show();
+            });
+
+            ipcRenderer.on('update-downloaded', () => {
+                const banner = document.createElement('div');
+                banner.className = 'fixed top-12 left-0 right-0 bg-emerald-600 text-white p-4 text-center z-50';
+                banner.innerHTML = `
+                    A new version is ready to install! 
+                    <button onclick="location.reload()" 
+                        class="ml-4 px-4 py-1 bg-white text-emerald-600 rounded-lg hover:bg-emerald-50">
+                        Restart Now
+                    </button>
+                `;
+                document.body.appendChild(banner);
+            });
         }
 
         document.getElementById('startupToggle').addEventListener('change', async (e) => {
