@@ -1,9 +1,10 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
+const { app, BrowserWindow, ipcMain, Tray, Menu } = require('electron')
 const path = require('path')
 const Store = require('electron-store')
 const store = new Store()
 
 let mainWindow
+let tray
 
 function createWindow() {
     const startMinimized = store.get('startMinimized') || false;
@@ -16,7 +17,7 @@ function createWindow() {
         backgroundColor: '#18181b',
         frame: false,
         show: !startMinimized,
-        icon: path.join(__dirname, '../../src/assets/icon.png'),
+        icon: path.join(__dirname, '../../src/assets/icon.ico'),
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false
@@ -24,9 +25,51 @@ function createWindow() {
     })
 
     mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'))
+
+    mainWindow.on('minimize', (event) => {
+        event.preventDefault();
+        mainWindow.minimize();
+    });
+
+    mainWindow.on('close', (event) => {
+        if (!app.isQuitting) {
+            event.preventDefault();
+            mainWindow.hide();
+        }
+        return false;
+    });
 }
 
-app.whenReady().then(createWindow)
+function createTray() {
+    tray = new Tray(path.join(__dirname, '../../src/assets/icon.ico'));
+    const contextMenu = Menu.buildFromTemplate([
+        {
+            label: 'Show Prowatch',
+            click: () => {
+                mainWindow.show();
+            }
+        },
+        {
+            label: 'Quit',
+            click: () => {
+                app.isQuitting = true;
+                app.quit();
+            }
+        }
+    ]);
+
+    tray.setToolTip('Prowatch');
+    tray.setContextMenu(contextMenu);
+
+    tray.on('click', () => {
+        mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show();
+    });
+}
+
+app.whenReady().then(() => {
+    createWindow();
+    createTray();
+})
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
@@ -41,7 +84,7 @@ app.on('activate', () => {
 })
 
 ipcMain.on('minimize-window', () => {
-    mainWindow.minimize()
+    mainWindow.minimize();
 })
 
 function getAppPath() {

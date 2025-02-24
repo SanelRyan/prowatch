@@ -10,7 +10,7 @@
   },
   "author": "Sanel Ryan",
   "license": "ISC",
-  "description": "A modern task timer application with a sleek Windows 11-inspired interface. Features include daily task tracking, multiple timer management, task statistics, system tray integration, and startup options..",
+  "description": "Prowatch",
   "devDependencies": {
     "electron": "^34.2.0",
     "electron-builder": "^25.1.8"
