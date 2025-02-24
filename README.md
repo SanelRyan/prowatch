@@ -35,7 +35,7 @@ A modern task timer application with a sleek interface. Prowatch helps you manag
 
 ## Installation
 
-Visit the [releases page](https://github.com/itsbennfr/prowatch/releases) to download the latest version.
+Visit the [releases page](https://github.com/sanelryan/prowatch/releases) to download the latest version.
 
 ## Technologies Used
 
@@ -47,7 +47,7 @@ Visit the [releases page](https://github.com/itsbennfr/prowatch/releases) to dow
 
 ## License
 
-[MIT License](https://github.com/itsbennfr/prowatch/blob/main/LICENSE)
+[MIT License](https://github.com/sanelryan/prowatch/blob/main/LICENSE)
 
 ## Author
 
