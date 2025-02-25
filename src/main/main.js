@@ -3,9 +3,33 @@ const path = require('path')
 const Store = require('electron-store')
 const store = new Store()
 const { autoUpdater } = require('electron-updater')
+const TimerManager = require('./timerManager')
 
 let mainWindow
 let tray
+let timerManager
+
+const gotTheLock = app.requestSingleInstanceLock()
+
+if (!gotTheLock) {
+    app.quit()
+} else {
+    app.on('second-instance', () => {
+        if (mainWindow) {
+            if (mainWindow.isMinimized()) {
+                mainWindow.restore()
+            }
+            mainWindow.show()
+            mainWindow.focus()
+        }
+    })
+
+    app.whenReady().then(() => {
+        createWindow()
+        createTray()
+        checkForUpdates()
+    })
+}
 
 function createWindow() {
     const startMinimized = store.get('startMinimized') || false;
@@ -48,6 +72,8 @@ function createWindow() {
         }
         return false;
     });
+
+    timerManager = new TimerManager(mainWindow);
 }
 
 function createTray() {
@@ -87,12 +113,6 @@ function checkForUpdates() {
         mainWindow.webContents.send('update-downloaded');
     });
 }
-
-app.whenReady().then(() => {
-    createWindow();
-    createTray();
-    checkForUpdates();
-})
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
@@ -154,4 +174,26 @@ ipcMain.on('show-notification', (_, options) => {
         body: options.body
     });
     notification.show();
+});
+
+ipcMain.handle('start-timer', (_, { id, remainingSeconds, taskName }) => {
+    timerManager.startTimer(id, remainingSeconds, taskName);
+});
+
+ipcMain.handle('stop-timer', (_, { id }) => {
+    timerManager.stopTimer(id);
+});
+
+ipcMain.handle('clear-settings', () => {
+    store.clear();
+    app.setLoginItemSettings({
+        openAtLogin: false
+    });
+    return true;
+});
+
+app.on('before-quit', () => {
+    if (timerManager) {
+        timerManager.clearAllTimers();
+    }
 }); 

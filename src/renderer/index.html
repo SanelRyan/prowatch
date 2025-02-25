@@ -81,30 +81,85 @@
             <form id="taskForm" class="mb-8 space-y-5">
                 <div class="relative">
                     <input type="text" id="taskName" placeholder="What are you working on?" 
-                        class="w-full p-3 border border-zinc-700 rounded-lg bg-zinc-800/50 backdrop-blur text-zinc-50 placeholder-zinc-400 focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 transition-all" required>
+                        class="w-full p-3 border border-zinc-700 rounded-lg bg-zinc-800/50 backdrop-blur text-zinc-50 placeholder-zinc-400 focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 transition-all" 
+                        maxlength="50" required>
+                    <div id="taskNameError" class="absolute -bottom-5 left-0 text-xs text-red-400 hidden">Task name is required</div>
+                </div>
+                
+                <div class="flex gap-4 mb-4">
+                    <button type="button" onclick="setPriority('low')"
+                        class="flex-1 p-2 rounded-lg border border-zinc-700 hover:bg-zinc-700/50 text-zinc-400 priority-btn"
+                        data-priority="low">
+                        Low
+                    </button>
+                    <button type="button" onclick="setPriority('medium')"
+                        class="flex-1 p-2 rounded-lg border border-zinc-700 hover:bg-zinc-700/50 text-zinc-300 priority-btn"
+                        data-priority="medium">
+                        Medium
+                    </button>
+                    <button type="button" onclick="setPriority('high')"
+                        class="flex-1 p-2 rounded-lg border border-zinc-700 hover:bg-zinc-700/50 text-red-400 priority-btn"
+                        data-priority="high">
+                        High
+                    </button>
+                </div>
+                
+                <div class="relative mb-4">
+                    <select id="taskCategory" 
+                        class="w-full p-3 border border-zinc-700 rounded-lg bg-zinc-800/50 backdrop-blur text-zinc-50 focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 transition-all">
+                        <option value="work">Work</option>
+                        <option value="personal">Personal</option>
+                        <option value="study">Study</option>
+                        <option value="health">Health</option>
+                        <option value="entertainment">Entertainment</option>
+                        <option value="gaming">Gaming</option>
+                        <option value="project">Project</option>
+                        <option value="meeting">Meeting</option>
+                        <option value="exercise">Exercise</option>
+                        <option value="reading">Reading</option>
+                        <option value="writing">Writing</option>
+                        <option value="coding">Coding</option>
+                        <option value="research">Research</option>
+                        <option value="planning">Planning</option>
+                        <option value="creative">Creative</option>
+                        <option value="social">Social</option>
+                        <option value="errands">Errands</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="relative">
+                    <input type="text" id="taskTags" placeholder="Add tags (comma separated)" 
+                        class="w-full p-3 border border-zinc-700 rounded-lg bg-zinc-800/50 backdrop-blur text-zinc-50 placeholder-zinc-400 focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 transition-all">
                 </div>
                 
                 <div class="flex gap-4">
                     <div class="w-1/2 relative">
                         <label for="hours" class="block text-sm text-zinc-300 mb-1">Hours</label>
-                        <input type="number" id="hours" placeholder="0" min="0" 
+                        <input type="number" id="hours" placeholder="0" min="0" max="24" 
                             class="w-full p-3 border border-zinc-700 rounded-lg bg-zinc-800/50 backdrop-blur text-zinc-50 focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 transition-all">
+                        <div id="hoursError" class="absolute -bottom-5 left-0 text-xs text-red-400 hidden">Maximum 24 hours</div>
                     </div>
                     <div class="w-1/2 relative">
                         <label for="minutes" class="block text-sm text-zinc-300 mb-1">Minutes</label>
                         <input type="number" id="minutes" placeholder="0" min="0" max="59" 
                             class="w-full p-3 border border-zinc-700 rounded-lg bg-zinc-800/50 backdrop-blur text-zinc-50 focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 transition-all">
+                        <div id="minutesError" class="absolute -bottom-5 left-0 text-xs text-red-400 hidden">Maximum 59 minutes</div>
                     </div>
                 </div>
                 
                 <div class="flex gap-4">
                     <button type="submit" 
-                        class="flex-1 bg-gradient-to-r from-zinc-700 to-zinc-800 backdrop-blur text-white p-3 rounded-lg hover:from-zinc-600 hover:to-zinc-700 active:from-zinc-800 active:to-zinc-900 transform active:scale-98 transition-all font-medium text-lg">
+                        class="flex-1 bg-gradient-to-r from-zinc-700 to-zinc-800 backdrop-blur text-white p-3 rounded-lg hover:from-zinc-600 hover:to-zinc-700 active:from-zinc-800 active:to-zinc-900 transform active:scale-98 transition-all font-medium text-lg disabled:opacity-50 disabled:cursor-not-allowed">
                         Add Task
                     </button>
                     <button type="button" onclick="addTaskToAllDays()"
-                        class="flex-1 bg-gradient-to-r from-zinc-700 to-zinc-800 backdrop-blur text-white p-3 rounded-lg hover:from-zinc-600 hover:to-zinc-700 active:from-zinc-800 active:to-zinc-900 transform active:scale-98 transition-all font-medium text-lg">
+                        class="flex-1 bg-gradient-to-r from-zinc-700 to-zinc-800 backdrop-blur text-white p-3 rounded-lg hover:from-zinc-600 hover:to-zinc-700 active:from-zinc-800 active:to-zinc-900 transform active:scale-98 transition-all font-medium text-lg disabled:opacity-50 disabled:cursor-not-allowed">
                         Add to All Days
+                    </button>
+                    <button type="button" onclick="scheduleTask()"
+                        class="flex-1 bg-gradient-to-r from-zinc-700 to-zinc-800 backdrop-blur text-white p-3 rounded-lg hover:from-zinc-600 hover:to-zinc-700 active:from-zinc-800 active:to-zinc-900 transform active:scale-98 transition-all font-medium text-lg disabled:opacity-50 disabled:cursor-not-allowed">
+                        Schedule Task
                     </button>
                 </div>
             </form>
@@ -120,34 +175,30 @@
             <div class="mb-6">
                 <div class="flex gap-2">
                     <button onclick="changeDate(getPreviousDay())" 
-                        class="px-4 py-3 win11-button rounded-lg transition-all text-slate-50">
-                        ←
+                        class="group relative p-2.5 rounded-lg bg-zinc-700/50 hover:bg-zinc-600/50 active:bg-zinc-800/50 backdrop-blur
+                        transform active:scale-95 transition-all text-zinc-300 hover:text-white">
+                        <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 text-sm text-white bg-black/80 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Previous Day</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
                     </button>
                     <input type="date" id="dateSelector"
-                           class="flex-1 p-3 border border-slate-800 rounded-lg bg-black/50 backdrop-blur text-slate-50 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all cursor-pointer [&::-webkit-calendar-picker-indicator]:invert">
+                           onchange="validateDateSelection(this)"
+                           class="flex-1 p-3 border border-zinc-700 rounded-lg bg-zinc-800/50 backdrop-blur text-zinc-50 focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 transition-all cursor-pointer [&::-webkit-calendar-picker-indicator]:invert">
                     <button onclick="changeDate(getNextDay())" 
-                        class="px-4 py-3 win11-button rounded-lg transition-all text-slate-50">
-                        →
+                        class="group relative p-2.5 rounded-lg bg-zinc-700/50 hover:bg-zinc-600/50 active:bg-zinc-800/50 backdrop-blur
+                        transform active:scale-95 transition-all text-zinc-300 hover:text-white">
+                        <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 text-sm text-white bg-black/80 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Next Day</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
                     </button>
                 </div>
             </div>
 
             <div id="taskList" class="space-y-5"></div>
             
-            <div id="statsPanel" class="hidden mt-8 space-y-6 bg-zinc-800/50 backdrop-blur p-6 rounded-xl border border-zinc-700/50">
-                <h2 class="text-2xl font-semibold text-zinc-50">Task Statistics</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-zinc-900/50 p-4 rounded-lg">
-                        <h3 class="text-lg text-zinc-300 mb-2">Completion Rate</h3>
-                        <p id="completionRate" class="text-3xl font-semibold text-emerald-400"></p>
-                    </div>
-                    <div class="bg-zinc-900/50 p-4 rounded-lg">
-                        <h3 class="text-lg text-zinc-300 mb-2">Total Tasks</h3>
-                        <p id="totalTasks" class="text-3xl font-semibold text-blue-400"></p>
-                    </div>
-                </div>
-                <div id="tasksByDay" class="space-y-4"></div>
-            </div>
+            
         </div>
     </div>
 
@@ -157,6 +208,60 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
         </svg>
     </button>
+
+    <div id="statsModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
+        <div class="bg-zinc-900/90 backdrop-blur-xl rounded-2xl win11-shadow p-6 border border-zinc-800/50 max-w-4xl w-full mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-semibold text-zinc-50">Statistics</h2>
+                <button onclick="toggleStats()" class="text-zinc-400 hover:text-zinc-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-6">
+                    <div class="flex items-center justify-between p-4 bg-zinc-800/50 rounded-lg">
+                        <div>
+                            <h3 class="text-zinc-100 font-medium">Completion Rate</h3>
+                            <p class="text-zinc-400 text-sm">Overall task completion percentage</p>
+                        </div>
+                        <p id="completionRate" class="text-2xl font-semibold text-emerald-400"></p>
+                    </div>
+                    <div class="flex items-center justify-between p-4 bg-zinc-800/50 rounded-lg">
+                        <div>
+                            <h3 class="text-zinc-100 font-medium">Total Tasks</h3>
+                            <p class="text-zinc-400 text-sm">Number of tasks across this week</p>
+                        </div>
+                        <p id="totalTasks" class="text-2xl font-semibold text-blue-400"></p>
+                    </div>
+                    <div id="selectedDayStats" class="p-4 bg-zinc-800/50 rounded-lg">
+                        <h3 class="text-zinc-100 font-medium mb-2">Selected Day Details</h3>
+                        <div id="selectedDayDetails" class="text-zinc-400"></div>
+                    </div>
+                </div>
+                
+                <div class="bg-zinc-800/50 rounded-lg p-4">
+                    <div class="flex justify-between items-center mb-4">
+                        <button onclick="changeMonth(-1)" class="text-zinc-400 hover:text-zinc-100">←</button>
+                        <h3 id="currentMonthYear" class="text-zinc-100 font-medium"></h3>
+                        <button onclick="changeMonth(1)" class="text-zinc-400 hover:text-zinc-100">→</button>
+                    </div>
+                    <div class="grid grid-cols-7 gap-1 text-center mb-2">
+                        <div class="text-zinc-400 text-sm">Sun</div>
+                        <div class="text-zinc-400 text-sm">Mon</div>
+                        <div class="text-zinc-400 text-sm">Tue</div>
+                        <div class="text-zinc-400 text-sm">Wed</div>
+                        <div class="text-zinc-400 text-sm">Thu</div>
+                        <div class="text-zinc-400 text-sm">Fri</div>
+                        <div class="text-zinc-400 text-sm">Sat</div>
+                    </div>
+                    <div id="calendar" class="grid grid-cols-7 gap-1"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div id="settingsModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
         <div class="bg-zinc-900/90 backdrop-blur-xl rounded-2xl win11-shadow p-6 border border-zinc-800/50 max-w-md w-full mx-4">
@@ -190,6 +295,92 @@
                         <div class="w-11 h-6 bg-zinc-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-zinc-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
                     </label>
                 </div>
+                <div class="flex items-center justify-between p-4 bg-zinc-800/50 rounded-lg">
+                    <div>
+                        <h3 class="text-zinc-100 font-medium">Clear Previous Days</h3>
+                        <p class="text-zinc-400 text-sm">Delete all tasks from past days</p>
+                    </div>
+                    <button onclick="clearPreviousDays()" 
+                        class="px-4 py-2 bg-red-600/90 hover:bg-red-700/90 active:bg-red-800/90 rounded-lg text-white transform active:scale-98 transition-all">
+                        Clear
+                    </button>
+                </div>
+                <div class="flex items-center justify-between p-4 bg-zinc-800/50 rounded-lg">
+                    <div>
+                        <h3 class="text-zinc-100 font-medium">Clear All Data</h3>
+                        <p class="text-zinc-400 text-sm">Delete all tasks and settings</p>
+                    </div>
+                    <button onclick="clearAllData()" 
+                        class="px-4 py-2 bg-red-600/90 hover:bg-red-700/90 active:bg-red-800/90 rounded-lg text-white transform active:scale-98 transition-all">
+                        Clear All
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="scheduleModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
+        <div class="bg-zinc-900/90 backdrop-blur-xl rounded-2xl win11-shadow p-6 border border-zinc-800/50 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-semibold text-zinc-50">Schedule Task</h2>
+                <button onclick="toggleScheduleModal()" class="text-zinc-400 hover:text-zinc-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="space-y-6">
+                <div class="relative">
+                    <input type="text" id="scheduleTaskName" placeholder="What are you working on?" 
+                        class="w-full p-3 border border-zinc-700 rounded-lg bg-zinc-800/50 backdrop-blur text-zinc-50 placeholder-zinc-400 focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 transition-all" 
+                        maxlength="50" required>
+                    <div id="scheduleTaskNameError" class="absolute -bottom-5 left-0 text-xs text-red-400 hidden">Task name is required</div>
+                </div>
+                
+                <div class="flex gap-4">
+                    <div class="w-1/2 relative">
+                        <label for="scheduleHours" class="block text-sm text-zinc-300 mb-1">Hours</label>
+                        <input type="number" id="scheduleHours" placeholder="0" min="0" max="24" 
+                            class="w-full p-3 border border-zinc-700 rounded-lg bg-zinc-800/50 backdrop-blur text-zinc-50 focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 transition-all">
+                        <div id="scheduleHoursError" class="absolute -bottom-5 left-0 text-xs text-red-400 hidden">Maximum 24 hours</div>
+                    </div>
+                    <div class="w-1/2 relative">
+                        <label for="scheduleMinutes" class="block text-sm text-zinc-300 mb-1">Minutes</label>
+                        <input type="number" id="scheduleMinutes" placeholder="0" min="0" max="59" 
+                            class="w-full p-3 border border-zinc-700 rounded-lg bg-zinc-800/50 backdrop-blur text-zinc-50 focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 transition-all">
+                        <div id="scheduleMinutesError" class="absolute -bottom-5 left-0 text-xs text-red-400 hidden">Maximum 59 minutes</div>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="scheduleDate" class="block text-sm text-zinc-300 mb-1">Select Date</label>
+                    <input type="date" id="scheduleDate"
+                        class="w-full p-3 border border-zinc-700 rounded-lg bg-zinc-800/50 backdrop-blur text-zinc-50 focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 transition-all cursor-pointer [&::-webkit-calendar-picker-indicator]:invert">
+                    <div id="scheduleDateError" class="text-xs text-red-400 mt-1 hidden">Please select a valid date</div>
+                </div>
+
+                <button onclick="confirmScheduleTask()" 
+                    class="w-full bg-gradient-to-r from-zinc-700 to-zinc-800 backdrop-blur text-white p-3 rounded-lg hover:from-zinc-600 hover:to-zinc-700 active:from-zinc-800 active:to-zinc-900 transform active:scale-98 transition-all font-medium text-lg">
+                    Schedule Task
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="confirmationModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
+        <div class="bg-zinc-900/90 backdrop-blur-xl rounded-2xl win11-shadow p-6 border border-zinc-800/50 max-w-md w-full mx-4">
+            <h2 class="text-xl font-semibold text-zinc-50 mb-4" id="confirmationTitle"></h2>
+            <p class="text-zinc-300 mb-6" id="confirmationMessage"></p>
+            <div class="flex gap-4">
+                <button onclick="handleConfirmation(true)" 
+                    class="flex-1 bg-red-600/90 hover:bg-red-700/90 active:bg-red-800/90 text-white p-3 rounded-lg transform active:scale-98 transition-all">
+                    Confirm
+                </button>
+                <button onclick="handleConfirmation(false)" 
+                    class="flex-1 bg-zinc-700/90 hover:bg-zinc-600/90 active:bg-zinc-800/90 text-white p-3 rounded-lg transform active:scale-98 transition-all">
+                    Cancel
+                </button>
             </div>
         </div>
     </div>
@@ -199,6 +390,7 @@
         
         let tasks = {};
         let today = new Date().toISOString().split('T')[0];
+        let selectedPriority = 'medium'; // Default priority
         
         loadTasks();
         document.getElementById('dateSelector').value = today;
@@ -216,13 +408,42 @@
             renderTasks();
         }
 
+        function setPriority(priority) {
+            selectedPriority = priority;
+            
+            // Remove active state from all priority buttons
+            document.querySelectorAll('.priority-btn').forEach(btn => {
+                btn.classList.remove('bg-zinc-700/50');
+                btn.classList.remove('ring-2');
+                btn.classList.remove('ring-zinc-500');
+            });
+            
+            // Add active state to selected button
+            const selectedBtn = document.querySelector(`[data-priority="${priority}"]`);
+            if (selectedBtn) {
+                selectedBtn.classList.add('bg-zinc-700/50');
+                selectedBtn.classList.add('ring-2');
+                selectedBtn.classList.add('ring-zinc-500');
+            }
+        }
+
+        // Initialize medium priority as selected
+        document.addEventListener('DOMContentLoaded', () => {
+            setPriority('medium');
+        });
+
         document.getElementById('taskForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            const name = document.getElementById('taskName').value;
+            if (!validateTaskForm()) return;
+            
+            const name = document.getElementById('taskName').value.trim();
             const hours = parseInt(document.getElementById('hours').value) || 0;
             const minutes = parseInt(document.getElementById('minutes').value) || 0;
+            const category = document.getElementById('taskCategory')?.value || 'work';
+            const tags = document.getElementById('taskTags')?.value?.split(',').map(tag => tag.trim()) || [];
 
             if (hours === 0 && minutes === 0) {
+                showError('minutesError', 'At least 1 minute is required');
                 return;
             }
 
@@ -231,13 +452,61 @@
                 name,
                 totalSeconds: (hours * 3600) + (minutes * 60),
                 remainingSeconds: (hours * 3600) + (minutes * 60),
-                isRunning: false
+                isRunning: false,
+                category,
+                tags,
+                priority: selectedPriority
             };
 
             tasks[today].push(task);
             renderTasks();
             e.target.reset();
+            clearErrors();
+            setPriority('medium'); // Reset priority to medium after task creation
         });
+
+        function validateTaskForm() {
+            clearErrors();
+            let isValid = true;
+            
+            const taskName = document.getElementById('taskName').value.trim();
+            const hours = parseInt(document.getElementById('hours').value) || 0;
+            const minutes = parseInt(document.getElementById('minutes').value) || 0;
+            
+            if (!taskName) {
+                showError('taskNameError', 'Task name is required');
+                isValid = false;
+            }
+            
+            if (hours > 24) {
+                showError('hoursError', 'Maximum 24 hours');
+                isValid = false;
+            }
+            
+            if (minutes > 59) {
+                showError('minutesError', 'Maximum 59 minutes');
+                isValid = false;
+            }
+            
+            if (hours === 0 && minutes === 0) {
+                showError('minutesError', 'At least 1 minute is required');
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.classList.remove('hidden');
+        }
+
+        function clearErrors() {
+            ['taskNameError', 'hoursError', 'minutesError'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+        }
 
         function renderTasks() {
             const taskList = document.getElementById('taskList');
@@ -251,30 +520,70 @@
                     return `
                         <div onclick="removePulse(this)" class="bg-zinc-800/70 backdrop-blur p-5 rounded-xl win11-shadow hover:shadow-lg transition-all border border-slate-700/50 ${task.remainingSeconds === 0 ? 'task-complete' : ''}" style="cursor: pointer;">
                             <div class="flex items-center justify-between flex-wrap gap-4">
-                                <div>
-                                    <h3 class="font-semibold text-lg text-slate-100 mb-1">${task.name}</h3>
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <h3 class="font-semibold text-lg text-slate-100">${task.name}</h3>
+                                        <span class="px-2 py-0.5 rounded text-xs ${
+                                            task.priority === 'high' ? 'bg-red-500/20 text-red-400' :
+                                            task.priority === 'medium' ? 'bg-zinc-500/20 text-zinc-300' :
+                                            'bg-zinc-600/20 text-zinc-400'
+                                        }">${task.priority}</span>
+                                    </div>
+                                    ${task.tags && task.tags.length > 0 ? `
+                                        <div class="flex flex-wrap gap-1 mb-1">
+                                            ${task.tags.map(tag => `
+                                                <span class="px-2 py-0.5 rounded-full text-xs bg-zinc-700/50 text-zinc-400">${tag}</span>
+                                            `).join('')}
+                                        </div>
+                                    ` : ''}
                                     <p class="text-2xl font-mono ${timeClass} transition-colors">
                                         ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}
                                     </p>
                                 </div>
-                                <div class="space-x-3">
-                                    <button onclick="toggleTimer(${task.id})" 
-                                        class="px-5 py-2.5 rounded-lg transform active:scale-98 transition-all font-medium backdrop-blur
-                                        ${task.isRunning 
-                                            ? 'bg-amber-600/90 hover:bg-amber-700/90 active:bg-amber-800/90' 
-                                            : 'bg-emerald-600/90 hover:bg-emerald-700/90 active:bg-emerald-800/90'} text-white">
-                                        ${task.isRunning ? 'Pause' : 'Start'}
+                                <div class="flex gap-2">
+                                    <button onclick="resetTimer(${task.id})" 
+                                        class="group relative p-2.5 rounded-lg bg-zinc-700/50 hover:bg-zinc-600/50 active:bg-zinc-800/50 backdrop-blur
+                                        transform active:scale-95 transition-all text-zinc-300 hover:text-white">
+                                        <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 text-sm text-white bg-black/80 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Reset Timer</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                        </svg>
                                     </button>
+                                    <button onclick="toggleTimer(${task.id})" 
+                                        class="group relative p-2.5 rounded-lg transform active:scale-95 transition-all backdrop-blur
+                                        ${task.isRunning 
+                                            ? 'bg-zinc-700/50 hover:bg-zinc-600/50 active:bg-zinc-800/50 text-amber-400' 
+                                            : 'bg-zinc-700/50 hover:bg-zinc-600/50 active:bg-zinc-800/50 text-emerald-400'}">
+                                        <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 text-sm text-white bg-black/80 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">${task.isRunning ? 'Pause Timer' : 'Start Timer'}</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            ${task.isRunning 
+                                                ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />'
+                                                : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />'}
+                                        </svg>
+                                    </button>
+                                    <div class="h-6 w-px bg-zinc-700/50 mx-1"></div>
                                     <button onclick="deleteTask(${task.id})" 
-                                        class="px-5 py-2.5 rounded-lg bg-red-600/90 hover:bg-red-700/90 active:bg-red-800/90 backdrop-blur
-                                        transform active:scale-98 transition-all font-medium text-white">
-                                        Delete
+                                        class="group relative p-2.5 rounded-lg bg-zinc-700/50 hover:bg-zinc-600/50 active:bg-zinc-800/50 backdrop-blur
+                                        transform active:scale-95 transition-all text-zinc-300 hover:text-red-400">
+                                        <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 text-sm text-white bg-black/80 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Delete Task</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
                                     </button>
                                     <button onclick="deleteTaskFromAllDays('${task.name}')" 
-                                        class="px-5 py-2.5 rounded-lg bg-red-600/90 hover:bg-red-700/90 active:bg-red-800/90 backdrop-blur
-                                        transform active:scale-98 transition-all font-medium text-white">
-                                        Delete All
+                                        class="group relative p-2.5 rounded-lg bg-zinc-700/50 hover:bg-zinc-600/50 active:bg-zinc-800/50 backdrop-blur
+                                        transform active:scale-95 transition-all text-zinc-300 hover:text-red-400">
+                                        <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 text-sm text-white bg-black/80 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Delete From All Days</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11l4 4m0-4l-4 4" />
+                                        </svg>
                                     </button>
+                                </div>
+                            </div>
+                            <div class="relative w-full h-1 bg-zinc-700/50 rounded-full mt-2">
+                                <div class="absolute left-0 top-0 h-full bg-emerald-500/50 rounded-full transition-all duration-300"
+                                     style="width: ${Math.round((1 - task.remainingSeconds / task.totalSeconds) * 100)}%">
                                 </div>
                             </div>
                         </div>
@@ -285,57 +594,68 @@
 
         function removePulse(element) {
             element.classList.add('no-pulse');
-            const taskId = parseInt(element.querySelector('button').onclick.toString().match(/toggleTimer\((\d+)\)/)[1]);
-            const task = tasks[today].find(t => t.id === taskId);
-            if (task && task.audioPlaying) {
-                const audio = document.getElementById('timerComplete');
-                audio.pause();
-                audio.currentTime = 0;
-                task.audioPlaying = false;
+            
+            // Find the first button with toggleTimer in its onclick handler
+            const toggleButton = element.querySelector('button[onclick*="toggleTimer"]');
+            if (!toggleButton) return;
+            
+            // Extract the task ID using a safer method
+            const onclickStr = toggleButton.getAttribute('onclick') || '';
+            const match = onclickStr.match(/toggleTimer\((\d+)\)/);
+            const taskId = match ? parseInt(match[1]) : null;
+            
+            if (taskId !== null) {
+                const task = tasks[today].find(t => t.id === taskId);
+                if (task && task.audioPlaying) {
+                    const audio = document.getElementById('timerComplete');
+                    audio.pause();
+                    audio.currentTime = 0;
+                    task.audioPlaying = false;
+                }
             }
         }
 
         function changeDate(selectedDate) {
             if (!tasks[selectedDate]) {
                 tasks[selectedDate] = [];
+                
+                const templateTask = localStorage.getItem('templateTask');
+                if (templateTask) {
+                    const template = JSON.parse(templateTask);
+                    const task = {
+                        id: Date.now() + Math.random(),
+                        name: template.name,
+                        totalSeconds: template.totalSeconds,
+                        remainingSeconds: template.totalSeconds,
+                        isRunning: false,
+                        category: template.category,
+                        tags: template.tags,
+                        priority: template.priority
+                    };
+                    tasks[selectedDate].push(task);
+                }
             }
             today = selectedDate;
             document.getElementById('dateSelector').value = selectedDate;
             renderTasks();
         }
 
-        function toggleTimer(id) {
+        async function toggleTimer(id) {
             const task = tasks[today].find(t => t.id === id);
             task.isRunning = !task.isRunning;
+            
+            if (task.isRunning) {
+                await ipcRenderer.invoke('start-timer', {
+                    id: task.id,
+                    remainingSeconds: task.remainingSeconds,
+                    taskName: task.name
+                });
+            } else {
+                await ipcRenderer.invoke('stop-timer', { id: task.id });
+            }
+            
             localStorage.setItem('tasksByDate', JSON.stringify(tasks));
             renderTasks();
-
-            if (task.isRunning) {
-                task.interval = setInterval(() => {
-                    if (task.remainingSeconds > 0) {
-                        task.remainingSeconds--;
-                        renderTasks();
-                    } else {
-                        clearInterval(task.interval);
-                        task.isRunning = false;
-                        const audio = document.getElementById('timerComplete');
-                        audio.loop = true;
-                        audio.play();
-                        task.audioPlaying = true;
-                        
-                        if (Notification.permission === 'granted') {
-                            new Notification('Task Complete', {
-                                body: `${task.name} has been completed!`,
-                                icon: './src/assets/icon.png'
-                            });
-                        }
-                        
-                        renderTasks();
-                    }
-                }, 1000);
-            } else {
-                clearInterval(task.interval);
-            }
         }
 
         function deleteTask(id) {
@@ -349,27 +669,42 @@
         }
 
         function addTaskToAllDays() {
-            const name = document.getElementById('taskName').value;
+            if (!validateTaskForm()) return;
+            
+            const name = document.getElementById('taskName').value.trim();
             const hours = parseInt(document.getElementById('hours').value) || 0;
             const minutes = parseInt(document.getElementById('minutes').value) || 0;
 
-            if (hours === 0 && minutes === 0 || !name) {
+            if (hours === 0 && minutes === 0) {
+                showError('minutesError', 'At least 1 minute is required');
                 return;
             }
 
-            Object.keys(tasks).forEach(date => {
-                const task = {
-                    id: Date.now() + Math.random(),
-                    name,
-                    totalSeconds: (hours * 3600) + (minutes * 60),
-                    remainingSeconds: (hours * 3600) + (minutes * 60),
-                    isRunning: false
-                };
-                tasks[date].push(task);
-            });
+            const templateTask = {
+                name,
+                totalSeconds: (hours * 3600) + (minutes * 60),
+                category: document.getElementById('taskCategory').value,
+                tags: document.getElementById('taskTags').value.split(',').map(tag => tag.trim()),
+                priority: selectedPriority
+            };
+
+            localStorage.setItem('templateTask', JSON.stringify(templateTask));
             
+            const task = {
+                id: Date.now() + Math.random(),
+                name: templateTask.name,
+                totalSeconds: templateTask.totalSeconds,
+                remainingSeconds: templateTask.totalSeconds,
+                isRunning: false,
+                category: templateTask.category,
+                tags: templateTask.tags,
+                priority: templateTask.priority
+            };
+            
+            tasks[today].push(task);
             renderTasks();
             document.getElementById('taskForm').reset();
+            clearErrors();
         }
 
         function deleteTaskFromAllDays(taskName) {
@@ -381,6 +716,11 @@
                     return t.name !== taskName;
                 });
             });
+            
+            if (taskName === JSON.parse(localStorage.getItem('templateTask'))?.name) {
+                localStorage.removeItem('templateTask');
+            }
+            
             localStorage.setItem('tasksByDate', JSON.stringify(tasks));
             renderTasks();
         }
@@ -388,19 +728,23 @@
         function getPreviousDay() {
             const date = new Date(today);
             date.setDate(date.getDate() - 1);
-            return date.toISOString().split('T')[0];
+            const minDate = new Date();
+            minDate.setMonth(minDate.getMonth() - 1);
+            return date < minDate ? today : date.toISOString().split('T')[0];
         }
 
         function getNextDay() {
             const date = new Date(today);
             date.setDate(date.getDate() + 1);
-            return date.toISOString().split('T')[0];
+            const maxDate = new Date();
+            maxDate.setMonth(maxDate.getMonth() + 3);
+            return date > maxDate ? today : date.toISOString().split('T')[0];
         }
 
         function toggleStats() {
-            const statsPanel = document.getElementById('statsPanel');
-            statsPanel.classList.toggle('hidden');
-            if (!statsPanel.classList.contains('hidden')) {
+            const modal = document.getElementById('statsModal');
+            modal.classList.toggle('hidden');
+            if (!modal.classList.contains('hidden')) {
                 updateStats();
             }
         }
@@ -411,42 +755,130 @@
             document.getElementById('completionRate').textContent = `${stats.completionRate}%`;
             document.getElementById('totalTasks').textContent = stats.totalTasks;
             
-            const tasksByDay = document.getElementById('tasksByDay');
-            tasksByDay.innerHTML = Object.entries(stats.dailyStats)
-                .sort((a, b) => b[0].localeCompare(a[0]))
-                .map(([date, stat]) => `
-                    <div class="bg-zinc-900/50 p-4 rounded-lg">
-                        <h3 class="text-lg text-zinc-300 mb-2">${formatDate(date)}</h3>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <p class="text-zinc-400">Completed</p>
-                                <p class="text-2xl font-semibold text-emerald-400">${stat.completed}</p>
-                            </div>
-                            <div>
-                                <p class="text-zinc-400">Total</p>
-                                <p class="text-2xl font-semibold text-blue-400">${stat.total}</p>
-                            </div>
+            renderCalendar();
+        }
+
+        function renderCalendar() {
+            const startOfWeek = new Date(today);
+            startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
+            
+            document.getElementById('currentMonthYear').textContent = 
+                `Week of ${startOfWeek.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`;
+            
+            const calendar = document.getElementById('calendar');
+            calendar.innerHTML = '';
+            
+            for (let i = 0; i < 7; i++) {
+                const currentDate = new Date(startOfWeek);
+                currentDate.setDate(currentDate.getDate() + i);
+                const date = currentDate.toISOString().split('T')[0];
+                const dayStats = tasks[date] || [];
+                const completed = dayStats.filter(t => t.remainingSeconds === 0).length;
+                const total = dayStats.length;
+                
+                const dayElement = createDayElement(currentDate.getDate(), date, completed, total);
+                calendar.appendChild(dayElement);
+            }
+        }
+
+        function createDayElement(day, date, completed, total) {
+            const div = document.createElement('div');
+            div.className = 'aspect-square flex flex-col items-center justify-center p-1 rounded-lg text-sm';
+            
+            if (!day) {
+                div.className += ' text-zinc-700';
+                div.textContent = '';
+                return div;
+            }
+            
+            const isToday = date === today;
+            const hasData = total > 0;
+            
+            div.className += hasData 
+                ? ' cursor-pointer hover:bg-zinc-700/50' 
+                : ' text-zinc-600';
+            
+            if (isToday) {
+                div.className += ' ring-2 ring-blue-500';
+            }
+            
+            div.innerHTML = `
+                <span class="font-medium ${hasData ? 'text-zinc-100' : ''}">${day}</span>
+                ${hasData ? `<span class="text-xs text-emerald-400">${completed}/${total}</span>` : ''}
+            `;
+            
+            if (hasData) {
+                div.onclick = () => showDayDetails(date);
+            }
+            
+            return div;
+        }
+
+        function showDayDetails(date) {
+            const dayTasks = tasks[date] || [];
+            const completed = dayTasks.filter(t => t.remainingSeconds === 0).length;
+            const details = document.getElementById('selectedDayDetails');
+            
+            details.innerHTML = `
+                <p class="text-zinc-100 mb-2">${formatDate(date)}</p>
+                <p class="mb-1">Completed: ${completed}/${dayTasks.length}</p>
+                <div class="space-y-2">
+                    ${dayTasks.map(task => `
+                        <div class="flex justify-between items-center">
+                            <span class="${task.remainingSeconds === 0 ? 'text-emerald-400' : 'text-zinc-300'}">${task.name}</span>
+                            <span class="text-xs ${task.remainingSeconds === 0 ? 'text-emerald-400' : 'text-zinc-400'}">
+                                ${task.remainingSeconds === 0 ? 'Completed' : 'Pending'}
+                            </span>
                         </div>
-                    </div>
-                `).join('');
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function changeMonth(delta) {
+            const newDate = new Date(today);
+            newDate.setDate(newDate.getDate() + (delta * 7));
+            
+            const maxDate = new Date();
+            maxDate.setMonth(maxDate.getMonth() + 3);
+            
+            const minDate = new Date();
+            minDate.setMonth(minDate.getMonth() - 1);
+            
+            if (newDate > maxDate || newDate < minDate) {
+                return;
+            }
+            
+            today = newDate.toISOString().split('T')[0];
+            document.getElementById('dateSelector').value = today;
+            renderCalendar();
+            updateStats();
         }
 
         function calculateStats() {
+            const startOfWeek = new Date(today);
+            startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
+            const endOfWeek = new Date(startOfWeek);
+            endOfWeek.setDate(endOfWeek.getDate() + 6);
+
             let totalCompleted = 0;
             let totalTasks = 0;
             const dailyStats = {};
 
             Object.entries(tasks).forEach(([date, taskList]) => {
-                const completed = taskList.filter(t => t.remainingSeconds === 0).length;
-                const total = taskList.length;
-                
-                dailyStats[date] = {
-                    completed,
-                    total
-                };
-                
-                totalCompleted += completed;
-                totalTasks += total;
+                const taskDate = new Date(date);
+                if (taskDate >= startOfWeek && taskDate <= endOfWeek) {
+                    const completed = taskList.filter(t => t.remainingSeconds === 0).length;
+                    const total = taskList.length;
+                    
+                    dailyStats[date] = {
+                        completed,
+                        total
+                    };
+                    
+                    totalCompleted += completed;
+                    totalTasks += total;
+                }
             });
 
             const completionRate = totalTasks > 0 
@@ -473,7 +905,7 @@
         const originalRenderTasks = renderTasks;
         renderTasks = function() {
             originalRenderTasks();
-            if (!document.getElementById('statsPanel').classList.contains('hidden')) {
+            if (!document.getElementById('statsModal').classList.contains('hidden')) {
                 updateStats();
             }
         };
@@ -507,6 +939,16 @@
             document.getElementById('startupToggle').checked = startupEnabled;
             document.getElementById('startMinimizedToggle').checked = startMinimized;
 
+            // Set date input min/max
+            const dateSelector = document.getElementById('dateSelector');
+            const minDate = new Date();
+            minDate.setMonth(minDate.getMonth() - 1);
+            const maxDate = new Date();
+            maxDate.setMonth(maxDate.getMonth() + 3);
+            
+            dateSelector.min = minDate.toISOString().split('T')[0];
+            dateSelector.max = maxDate.toISOString().split('T')[0];
+
             // Add update event listeners
             ipcRenderer.on('update-available', () => {
                 const notification = new Notification('Update Available', {
@@ -527,6 +969,27 @@
                 `;
                 document.body.appendChild(banner);
             });
+
+            ipcRenderer.on('timer-tick', (_, { id, remainingSeconds }) => {
+                const task = tasks[today].find(t => t.id === id);
+                if (task) {
+                    task.remainingSeconds = remainingSeconds;
+                    renderTasks();
+                }
+            });
+
+            ipcRenderer.on('timer-complete', (_, { id, taskName }) => {
+                const task = tasks[today].find(t => t.id === id);
+                if (task) {
+                    task.isRunning = false;
+                    task.remainingSeconds = 0;
+                    const audio = document.getElementById('timerComplete');
+                    audio.loop = true;
+                    audio.play();
+                    task.audioPlaying = true;
+                    renderTasks();
+                }
+            });
         }
 
         document.getElementById('startupToggle').addEventListener('change', async (e) => {
@@ -539,6 +1002,217 @@
             const enabled = e.target.checked;
             await saveSetting('startMinimized', enabled);
         });
+
+        let confirmationCallback = null;
+
+        function showConfirmation(title, message, callback) {
+            const modal = document.getElementById('confirmationModal');
+            document.getElementById('confirmationTitle').textContent = title;
+            document.getElementById('confirmationMessage').textContent = message;
+            confirmationCallback = callback;
+            modal.classList.remove('hidden');
+        }
+
+        function handleConfirmation(confirmed) {
+            const modal = document.getElementById('confirmationModal');
+            modal.classList.add('hidden');
+            if (confirmationCallback) {
+                confirmationCallback(confirmed);
+                confirmationCallback = null;
+            }
+        }
+
+        function clearPreviousDays() {
+            showConfirmation(
+                "Clear Previous Days",
+                "Are you sure you want to clear all tasks from previous days?",
+                (confirmed) => {
+                    if (confirmed) {
+                        const today = new Date().toISOString().split('T')[0];
+                        Object.keys(tasks).forEach(date => {
+                            if (date < today) {
+                                delete tasks[date];
+                            }
+                        });
+                        
+                        localStorage.setItem('tasksByDate', JSON.stringify(tasks));
+                        renderTasks();
+                        
+                        if (!document.getElementById('statsModal').classList.contains('hidden')) {
+                            updateStats();
+                        }
+                    }
+                }
+            );
+        }
+
+        function clearAllData() {
+            showConfirmation(
+                "Clear All Data",
+                "Are you sure you want to clear all data? This will delete all tasks and settings.",
+                (confirmed) => {
+                    if (confirmed) {
+                        localStorage.clear();
+                        tasks = {};
+                        const today = new Date().toISOString().split('T')[0];
+                        tasks[today] = [];
+                        
+                        ipcRenderer.invoke('clear-settings');
+                        
+                        document.getElementById('startupToggle').checked = false;
+                        document.getElementById('startMinimizedToggle').checked = false;
+                        
+                        renderTasks();
+                        
+                        if (!document.getElementById('statsModal').classList.contains('hidden')) {
+                            updateStats();
+                        }
+                        
+                        toggleSettings();
+                    }
+                }
+            );
+        }
+
+        async function resetTimer(id) {
+            const task = tasks[today].find(t => t.id === id);
+            if (task) {
+                if (task.isRunning) {
+                    await ipcRenderer.invoke('stop-timer', { id: task.id });
+                }
+                task.isRunning = false;
+                task.remainingSeconds = task.totalSeconds;
+                task.audioPlaying = false;
+                const audio = document.getElementById('timerComplete');
+                audio.pause();
+                audio.currentTime = 0;
+                localStorage.setItem('tasksByDate', JSON.stringify(tasks));
+                renderTasks();
+            }
+        }
+
+        function validateDateSelection(input) {
+            const selectedDate = new Date(input.value);
+            const today = new Date();
+            
+            const minDate = new Date();
+            minDate.setMonth(minDate.getMonth() - 1);
+            
+            const maxDate = new Date();
+            maxDate.setMonth(maxDate.getMonth() + 3);
+            
+            if (selectedDate < minDate) {
+                input.value = minDate.toISOString().split('T')[0];
+            } else if (selectedDate > maxDate) {
+                input.value = maxDate.toISOString().split('T')[0];
+            }
+            
+            changeDate(input.value);
+        }
+
+        function scheduleTask() {
+            toggleScheduleModal();
+        }
+
+        function toggleScheduleModal() {
+            const modal = document.getElementById('scheduleModal');
+            modal.classList.toggle('hidden');
+            
+            if (!modal.classList.contains('hidden')) {
+                const scheduleDate = document.getElementById('scheduleDate');
+                const minDate = new Date();
+                minDate.setMonth(minDate.getMonth() - 1);
+                const maxDate = new Date();
+                maxDate.setMonth(maxDate.getMonth() + 3);
+                
+                scheduleDate.min = minDate.toISOString().split('T')[0];
+                scheduleDate.max = maxDate.toISOString().split('T')[0];
+                scheduleDate.value = document.getElementById('dateSelector').value;
+                
+                document.getElementById('scheduleTaskName').value = document.getElementById('taskName').value;
+                document.getElementById('scheduleHours').value = document.getElementById('hours').value;
+                document.getElementById('scheduleMinutes').value = document.getElementById('minutes').value;
+            }
+        }
+
+        function validateScheduleForm() {
+            const errors = document.querySelectorAll('#scheduleModal [id$="Error"]');
+            errors.forEach(error => error.classList.add('hidden'));
+            
+            let isValid = true;
+            
+            const taskName = document.getElementById('scheduleTaskName').value.trim();
+            const hours = parseInt(document.getElementById('scheduleHours').value) || 0;
+            const minutes = parseInt(document.getElementById('scheduleMinutes').value) || 0;
+            const scheduleDate = document.getElementById('scheduleDate').value;
+            
+            if (!taskName) {
+                document.getElementById('scheduleTaskNameError').classList.remove('hidden');
+                isValid = false;
+            }
+            
+            if (hours > 24) {
+                document.getElementById('scheduleHoursError').classList.remove('hidden');
+                isValid = false;
+            }
+            
+            if (minutes > 59) {
+                document.getElementById('scheduleMinutesError').classList.remove('hidden');
+                isValid = false;
+            }
+            
+            if (hours === 0 && minutes === 0) {
+                document.getElementById('scheduleMinutesError').textContent = 'At least 1 minute is required';
+                document.getElementById('scheduleMinutesError').classList.remove('hidden');
+                isValid = false;
+            }
+            
+            if (!scheduleDate) {
+                document.getElementById('scheduleDateError').classList.remove('hidden');
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+
+        function confirmScheduleTask() {
+            if (!validateScheduleForm()) return;
+            
+            const name = document.getElementById('scheduleTaskName').value.trim();
+            const hours = parseInt(document.getElementById('scheduleHours').value) || 0;
+            const minutes = parseInt(document.getElementById('scheduleMinutes').value) || 0;
+            const scheduleDate = document.getElementById('scheduleDate').value;
+
+            const task = {
+                id: Date.now() + Math.random(),
+                name,
+                totalSeconds: (hours * 3600) + (minutes * 60),
+                remainingSeconds: (hours * 3600) + (minutes * 60),
+                isRunning: false,
+                category: document.getElementById('taskCategory').value,
+                tags: document.getElementById('taskTags').value.split(',').map(tag => tag.trim()),
+                priority: selectedPriority
+            };
+
+            if (!tasks[scheduleDate]) {
+                tasks[scheduleDate] = [];
+            }
+            tasks[scheduleDate].push(task);
+            
+            localStorage.setItem('tasksByDate', JSON.stringify(tasks));
+            
+            if (scheduleDate === today) {
+                renderTasks();
+            }
+            
+            const notification = new Notification('Task Scheduled', {
+                body: `Task "${name}" scheduled for ${formatDate(scheduleDate)}`
+            });
+            
+            toggleScheduleModal();
+            document.getElementById('taskForm').reset();
+            clearErrors();
+        }
 
         loadSettings();
     </script>
